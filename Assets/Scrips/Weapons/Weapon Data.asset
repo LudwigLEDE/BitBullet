@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b0c5ddb445b4c24089738cdbc9d723c, type: 3}
+  m_Name: Weapon Data
+  m_EditorClassIdentifier: 
+  enemies: []
+  npcs: []
+  towers: []
+  mapSizeX: 20
+  mapSizeY: 20
+  towerClearRadius: 3
+  lootCap: 2
+  npcCap: 0
+  startingSpell: Soularrow
+  basePlayerSpeed: 10
+  basePlayerHealth: 50
+  basePlayerDamage: 0
+  abilityCap: 2
+  baseHPRegen: 0.5
+  baseArtifactCount: 3
+  GameOverOnSecond: 900
+  baseEXPMultiplier: 5
+  baseDivisor: 2
+  lowExpColor: {r: 0, g: 1, b: 0.9528818, a: 1}
+  highExpColor: {r: 1, g: 0, b: 0, a: 1}
+  highExp: 140
+  lowDamageColor: {r: 1, g: 1, b: 1, a: 1}
+  highDamage: 50
+  highDamageColor: {r: 1, g: 0, b: 0.213181, a: 0}
+  damagePrefabSettings: {fileID: 0}
+  veilColor: {r: 0.65, g: 0.65, b: 0.22, a: 1}
+  VeilMultiplier: 2
