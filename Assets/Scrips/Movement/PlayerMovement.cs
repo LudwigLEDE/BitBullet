@@ -1,8 +1,9 @@
 using UnityEngine;
 using System.Collections;
+using Unity.Netcode;
 
 [RequireComponent(typeof(Animator))]
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : NetworkBehaviour
 {
     public CharacterController controller;
     public Transform playerCam;
@@ -33,6 +34,8 @@ public class PlayerMovement : MonoBehaviour
         new Vector3(-0.03f, 0.02f, 1f)
     };
 
+  
+
     void Start()
     {
         currentSpeed = speed;
@@ -42,6 +45,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+
+        if(!IsOwner)
+            return;
         isGrounded = controller.isGrounded;
         HandleMovement();
         HandleMouseLook();
@@ -50,8 +56,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-            Shoot();
+            ShootServerRpc();
         }
+
+
     }
 
     void HandleMovement()
@@ -121,6 +129,24 @@ public class PlayerMovement : MonoBehaviour
 
     void Shoot()
     {
+        Animator.SetBool("IsShooting", true);
+        Vector3 bulletDirection = transform.TransformDirection(bulletPattern[bulletIndex]);
+        bulletIndex = (bulletIndex + 1) % bulletPattern.Length;
+        Debug.Log("Bullet Direction: " + bulletDirection);
+    }
+
+    [ServerRpc]
+    void ShootServerRpc()
+    {
+        // Call the ClientRpc to tell everyone to play the shooting action.
+        ShootClientRpc();
+    }
+
+    // This ClientRpc will be executed on all clients.
+    [ClientRpc]
+    void ShootClientRpc()
+    {
+        // Trigger shooting animation and bullet logic
         Animator.SetBool("IsShooting", true);
         Vector3 bulletDirection = transform.TransformDirection(bulletPattern[bulletIndex]);
         bulletIndex = (bulletIndex + 1) % bulletPattern.Length;
