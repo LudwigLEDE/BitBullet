@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 using UnityEngine;
 using System.Collections;
 
@@ -21,12 +22,33 @@ public class GameManager : MonoBehaviour
     // Offsets to spawn additional players so they don't overlap
     public Vector3 team1Offset = new Vector3(1, 0, 0);
     public Vector3 team2Offset = new Vector3(1, 0, 0);
+=======
+using System.Collections;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class GameManager : MonoBehaviour
+{
+    public static GameManager Instance;
+    public int roundTime = 60; // Seconds per round
+    private float currentRoundTime;
+    private bool roundActive = true;
+
+    void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
+>>>>>>> 2e4d734e56eb1b5b3681e81fb8e39b6ddc70412d
 
     void Start()
     {
         StartRound();
     }
 
+<<<<<<< HEAD
     // Start a new round by spawning players and starting the timer.
     void StartRound()
     {
@@ -82,12 +104,49 @@ public class GameManager : MonoBehaviour
         // Additional end-of-round logic (score calculation, cleanup, etc.) goes here.
 
         // Example: Restart round after a delay.
+=======
+    void StartRound()
+    {
+        currentRoundTime = roundTime;
+        roundActive = true;
+        StartCoroutine(RoundTimer());
+    }
+
+    IEnumerator RoundTimer()
+    {
+        while (currentRoundTime > 0 && roundActive)
+        {
+            currentRoundTime -= Time.deltaTime;
+            yield return null;
+        }
+
+        if (roundActive)
+            RoundLost(); // If time runs out, the attackers lose
+    }
+
+    public void RoundWon(int winningTeam)
+    {
+        roundActive = false;
+        Debug.Log("Team " + winningTeam + " won the round!");
+        StartCoroutine(RestartRound());
+    }
+
+    public void RoundLost()
+    {
+        roundActive = false;
+        Debug.Log("Defenders won the round!");
+>>>>>>> 2e4d734e56eb1b5b3681e81fb8e39b6ddc70412d
         StartCoroutine(RestartRound());
     }
 
     IEnumerator RestartRound()
     {
+<<<<<<< HEAD
         yield return new WaitForSeconds(3f);
         StartRound();
+=======
+        yield return new WaitForSeconds(5); // Wait before restarting
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Restart the scene
+>>>>>>> 2e4d734e56eb1b5b3681e81fb8e39b6ddc70412d
     }
 }
