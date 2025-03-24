@@ -3,7 +3,7 @@ using System.Collections;
 using Unity.Netcode;
 
 [RequireComponent(typeof(Animator))]
-public class PlayerMovement : NetworkBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     public CharacterController controller;
     public Transform playerCam;
@@ -45,9 +45,8 @@ public class PlayerMovement : NetworkBehaviour
 
     void Update()
     {
-
-        if(!IsOwner)
-            return;
+        //if(!IsOwner)
+        //    return;
         isGrounded = controller.isGrounded;
         HandleMovement();
         HandleMouseLook();
