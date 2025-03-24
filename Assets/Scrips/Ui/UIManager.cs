@@ -4,6 +4,11 @@ using UnityEngine.UI;  // Still needed for UI elements like Slider
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager instance;
+    private void Awake()
+    {
+        instance = this;
+    }
     [Header("Display Elements")]
     // Use TextMeshProUGUI instead of Text for TMP support.
     public TextMeshProUGUI weaponDisplay;

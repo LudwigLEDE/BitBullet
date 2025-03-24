@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,11 +13,13 @@ public class WeaponManager : MonoBehaviour
     GameObject currentWeapon;
     WeaponHandler currentWeaponHandel;
     PlayerWeaponData currentWeaponData;
+    Player plr;
 
     private float lastShootTime;
 
     void Start()
     {
+        plr = GetComponent<Player>();
         lastShootTime = Time.time;
         foreach (PlayerWeaponData item in weaponData.Weapons)
         {
@@ -36,7 +39,7 @@ public class WeaponManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && currentWeaponHandel != null)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && currentWeaponHandel != null && plr.isLoaded && plr.isLocalPlayer)
         {
             Shoot();
      
@@ -84,5 +87,10 @@ public class WeaponManager : MonoBehaviour
 
         trail.transform.position = hit.point;
         Instantiate(weaponData.hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
+        PhotonView netWorker = hit.transform.gameObject.GetComponent<PhotonView>();
+        if (netWorker != null)
+        {
+            netWorker.RPC("Damage", RpcTarget.All, currentWeaponData.damage);
+        }
     }
 }

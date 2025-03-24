@@ -34,10 +34,11 @@ public class PlayerMovement : MonoBehaviour
         new Vector3(-0.03f, 0.02f, 1f)
     };
 
-  
+    Player plr;
 
     void Start()
     {
+        plr = GetComponent<Player>();
         currentSpeed = speed;
         Cursor.lockState = CursorLockMode.Locked;
         Animator = GetComponent<Animator>();
@@ -47,17 +48,19 @@ public class PlayerMovement : MonoBehaviour
     {
         //if(!IsOwner)
         //    return;
-        isGrounded = controller.isGrounded;
-        HandleMovement();
-        HandleMouseLook();
+        if (plr.isLoaded)
+        {
+            isGrounded = controller.isGrounded;
+            HandleMovement();
+            HandleMouseLook();
+            if (Input.GetButtonDown("Fire1"))
+            {
+                ShootServerRpc();
+            }
+
+        }
         ApplyGravity();
         controller.Move(velocity * Time.deltaTime);
-
-        if (Input.GetButtonDown("Fire1"))
-        {
-            ShootServerRpc();
-        }
-
 
     }
 
