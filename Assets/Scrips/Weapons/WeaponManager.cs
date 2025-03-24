@@ -2,6 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking.Types;
 
 
 
@@ -39,14 +40,14 @@ public class WeaponManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && currentWeaponHandel != null && plr.isLoaded && plr.isLocalPlayer)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && currentWeaponHandel != null && plr.isLoaded)
         {
             Shoot();
      
         }
     }
 
-    void Shoot()
+    public void Shoot()
     {
         if (lastShootTime + currentWeaponData.firerate < Time.time)
         {
@@ -56,10 +57,22 @@ public class WeaponManager : MonoBehaviour
             {
                 TrailRenderer trail = Instantiate(weaponData.bulletTrail, currentWeaponHandel.GetPointer().transform.position, Quaternion.identity);
                 StartCoroutine(SpawnTrail(trail, hit));
+                
+                    GetComponent<PhotonView>().RPC("SpawnTrailRPC", RpcTarget.All, currentWeaponHandel.GetPointer().transform.position, hit.point, hit.normal);
+                
                 lastShootTime = Time.time;
             }
         }
     }
+
+    [PunRPC]
+    public void SpawnTrailRPC(Vector3 startPosition, Vector3 hitPoint, Vector3 hitNormal)
+    {
+        // Instantiate the bullet trail on every client
+        TrailRenderer trail = Instantiate(weaponData.bulletTrail, startPosition, Quaternion.identity);
+        StartCoroutine(SpawnTrail(trail, hitPoint, hitNormal));
+    }
+
 
     private Vector3 GetDirection()
     {
@@ -90,7 +103,25 @@ public class WeaponManager : MonoBehaviour
         PhotonView netWorker = hit.transform.gameObject.GetComponent<PhotonView>();
         if (netWorker != null)
         {
-            netWorker.RPC("Damage", RpcTarget.All, currentWeaponData.damage);
+            netWorker.RPC("Damage", RpcTarget.All, currentWeaponData.damage);           
         }
+    }
+
+    private IEnumerator SpawnTrail(TrailRenderer trail, Vector3 hitPoint, Vector3 hitNormal)
+    {
+        float time = 0;
+        Vector3 startingPosition = trail.transform.position;
+
+        while (time < 1f)
+        {
+            trail.transform.position = Vector3.Lerp(startingPosition, hitPoint, time);
+            time += Time.deltaTime / trail.time;
+            yield return null;
+        }
+
+        trail.transform.position = hitPoint;
+
+        // Instantiate the hit effect locally (every client will do this)
+        Instantiate(weaponData.hitEffect, hitPoint, Quaternion.LookRotation(hitNormal));
     }
 }
