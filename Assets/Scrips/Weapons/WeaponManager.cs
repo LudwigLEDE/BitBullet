@@ -68,6 +68,7 @@ public class WeaponManager : MonoBehaviour
     [PunRPC]
     public void SpawnTrailRPC(Vector3 startPosition, Vector3 hitPoint, Vector3 hitNormal)
     {
+        currentWeaponHandel.GetMuzzleFlash().Play();
         // Instantiate the bullet trail on every client
         TrailRenderer trail = Instantiate(weaponData.bulletTrail, startPosition, Quaternion.identity);
         StartCoroutine(SpawnTrail(trail, hitPoint, hitNormal));

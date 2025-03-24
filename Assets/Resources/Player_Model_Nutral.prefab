@@ -1062,7 +1062,7 @@ MonoBehaviour:
   m_SynchronizeVelocity: 0
   m_SynchronizeAngularVelocity: 0
   m_TeleportEnabled: 1
-  m_TeleportIfDistanceGreaterThan: 3
+  m_TeleportIfDistanceGreaterThan: 0.29
 --- !u!114 &3922377424600734425
 MonoBehaviour:
   m_ObjectHideFlags: 0
