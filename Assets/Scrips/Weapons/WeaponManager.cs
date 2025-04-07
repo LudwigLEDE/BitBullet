@@ -104,6 +104,7 @@ public class WeaponManager : MonoBehaviour
         PhotonView netWorker = hit.transform.gameObject.GetComponent<PhotonView>();
         if (netWorker != null)
         {
+            RoomManager.instance.GetTeam(false); // returns List<Photon.Realtime.Player>
             netWorker.RPC("Damage", RpcTarget.All, currentWeaponData.damage);           
         }
     }

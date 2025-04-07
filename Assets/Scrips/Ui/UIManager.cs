@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI ammoDisplay;
     public TextMeshProUGUI healthDisplay;
     public TextMeshProUGUI roundTimerText;
+    public TextMeshProUGUI roundCode;
 
     // Slider for showing objective status (0-100).
     public Slider objectiveStatusSlider;

@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     public float HP;
     public bool isLocalPlayer;
     public bool isLoaded = false;
+    public bool isCreator = false;
     PlayerMovement movement;
     public GameObject spawn;
 
